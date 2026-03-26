@@ -1,3 +1,123 @@
-import React from 'react';
-function RestaurantDetails() {}
+import React, { useState } from 'react';
+import { useCurrentUser } from './hooks/useCurrentUser';
+import { useTablesByRestaurant } from './hooks/useTablesByRestaurant';
+import { useReserveTable } from './hooks/useReserveTable';
+
+function RestaurantDetails({ restaurant, onBack }) {
+  const { data: user } = useCurrentUser();
+  const { data: tables, isLoading } = useTablesByRestaurant(user ? restaurant.id : null);
+  const { mutate: reserveTable, isPending } = useReserveTable();
+
+  const [reservingTableId, setReservingTableId] = useState(null);
+  const [form, setForm] = useState({ resDate: '', resTime: '' });
+  const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleReserve = (e) => {
+    e.preventDefault();
+    setErrorMsg('');
+    reserveTable(
+      {
+        userId: user.id,
+        tableId: reservingTableId,
+        resDate: form.resDate,
+        resTime: form.resDate + 'T' + form.resTime,
+      },
+      {
+        onSuccess: () => {
+          setSuccessMsg('Foglalás sikeres!');
+          setReservingTableId(null);
+          setForm({ resDate: '', resTime: '' });
+        },
+        onError: (err) => setErrorMsg(err.message),
+      }
+    );
+  };
+
+  return (
+    <div className="container">
+      <button className="back-btn" onClick={onBack}>← Vissza a listához</button>
+
+      <div className="detail-hero">
+        <img
+          src={restaurant.image || `https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/${restaurant.name?.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+          alt={restaurant.name}
+          onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip'}
+        />
+        <div className="hero-text">
+          <h1>{restaurant.name}</h1>
+        </div>
+      </div>
+
+      <div className="detail-info">
+        <p>📍 {restaurant.address}</p>
+        {restaurant.phone && <p>📞 {restaurant.phone}</p>}
+      </div>
+
+      {successMsg && <div className="profile-success-msg">{successMsg}</div>}
+
+      <h2 className="section-title">Elérhető asztalok</h2>
+
+      {!user ? (
+        <p className="login-required-msg">Az asztalok megtekintéséhez és foglaláshoz <a href="/login">be kell jelentkezni</a>.</p>
+      ) : isLoading ? (
+        <p>Betöltés...</p>
+      ) : tables?.length > 0 ? (
+        <div className="grid">
+          {tables.map((table) => (
+            <div key={table.id} className="sub-card">
+              <h3>🍽️ {table.id}. asztal</h3>
+              <p>Férőhely: {table.seats} fő</p>
+
+              {reservingTableId === table.id ? (
+                <form onSubmit={handleReserve} className="booking-form">
+                  <div className="form-group">
+                    <label>Dátum</label>
+                    <input
+                      type="date"
+                      value={form.resDate}
+                      onChange={(e) => setForm((f) => ({ ...f, resDate: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Időpont</label>
+                    <input
+                      type="time"
+                      value={form.resTime}
+                      onChange={(e) => setForm((f) => ({ ...f, resTime: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  {errorMsg && <div className="error-msg">{errorMsg}</div>}
+                  <div className="profile-actions">
+                    <button type="submit" className="book-btn" disabled={isPending}>
+                      {isPending ? 'Foglalás...' : 'Foglalás megerősítése'}
+                    </button>
+                    <button
+                      type="button"
+                      className="profile-cancel-btn"
+                      onClick={() => { setReservingTableId(null); setErrorMsg(''); }}
+                    >
+                      Mégse
+                    </button>
+                  </div>
+                </form>
+              ) : user ? (
+                <button className="book-btn" onClick={() => { setReservingTableId(table.id); setSuccessMsg(''); }}>
+                  Foglalás
+                </button>
+              ) : (
+                <p className="login-required-msg">A foglaláshoz <a href="/login">be kell jelentkezni</a>.</p>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>Nincs elérhető asztal.</p>
+      )}
+    </div>
+  );
+}
+
 export default RestaurantDetails;

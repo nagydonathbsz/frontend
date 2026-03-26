@@ -25,14 +25,7 @@ function App() {
 
           <Route path="/citys" element={<Dashboard />} />
 
-          <Route
-            path="/citys/:cityId"
-            element={
-              <ProtectedRoute>
-                <CityDetails />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/citys/:cityId" element={<CityDetails />} />
 
           <Route
             path="/login"

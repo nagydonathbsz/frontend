@@ -669,7 +669,41 @@ body {
 }
 
 /* =========================================
-   9. ANIMÁCIÓK ÉS RESZPONZÍV
+   9. ACCOMMODATION & RESTAURANT DETAILS
+   ========================================= */
+.detail-info {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: 24px;
+}
+
+.booking-form {
+    margin-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 16px;
+}
+
+.login-required-msg {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.login-required-msg a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* =========================================
+   10. ANIMÁCIÓK ÉS RESZPONZÍV
    ========================================= */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
