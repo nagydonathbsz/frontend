@@ -522,7 +522,106 @@ body {
 }
 
 /* =========================================
-   7. FOOTER (Lábléc)
+   7. PROFILE (Profil oldal)
+   ========================================= */
+.profile-card {
+    max-width: 520px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.profile-admin-badge {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--white);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.profile-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 28px;
+}
+
+.profile-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.profile-field-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.profile-field-value {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.profile-empty {
+    color: var(--text-muted);
+    font-style: italic;
+    font-weight: 400;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.profile-cancel-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-cancel-btn:hover {
+    border-color: var(--text-muted);
+    color: var(--text-main);
+}
+
+.profile-success-msg {
+    background: #f0fdf4;
+    color: var(--success);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    border: 1px solid #bbf7d0;
+}
+
+.field-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 6px;
+}
+
+/* =========================================
+   8. FOOTER (Lábléc)
    ========================================= */
 .site-footer {
     background: var(--text-main);
@@ -570,7 +669,7 @@ body {
 }
 
 /* =========================================
-   8. ANIMÁCIÓK ÉS RESZPONZÍV
+   9. ANIMÁCIÓK ÉS RESZPONZÍV
    ========================================= */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }

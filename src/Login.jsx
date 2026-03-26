@@ -1,40 +1,29 @@
 import React, { useState } from 'react';
-import callApi from './call_api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogin } from './hooks/useLogin';
 
-function Login({ onSwitchToRegister, onLoginSuccess }) {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  
+function Login() {
+  const navigate = useNavigate();
+  const { mutate: login, isPending } = useLogin();
+
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (error) setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = await callApi.login(formData.email, formData.password);
-      if (token) {
-        onLoginSuccess(); 
+    login(
+      { email: formData.email, password: formData.password },
+      {
+        onSuccess: () => navigate('/citys'),
+        onError: (err) => setError(err.message || 'Hibás email cím vagy jelszó!'),
       }
-    } catch (err) {
-      setError(err.message || 'Hibás email cím vagy jelszó!');
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
   return (
@@ -72,18 +61,13 @@ function Login({ onSwitchToRegister, onLoginSuccess }) {
 
           {error && <div className="error-msg">{error}</div>}
 
-          <button 
-            type="submit" 
-            className="login-btn"
-            disabled={loading}
-          >
-            {loading ? 'Bejelentkezés...' : 'Bejelentkezés'}
+          <button type="submit" className="login-btn" disabled={isPending}>
+            {isPending ? 'Bejelentkezés...' : 'Bejelentkezés'}
           </button>
         </form>
 
         <div className="login-footer">
           <p>Még nincs fiókja?</p>
-          {/* Gomb helyett Link-et használunk, ami a /register útvonalra visz */}
           <Link to="/register" className="switch-btn">
             Regisztráció létrehozása
           </Link>

@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCurrentUser } from './hooks/useCurrentUser';
+import { useLogout } from './hooks/useLogout';
 
-function Navbar({ isLoggedIn, onLogout }) {
+function Navbar() {
   const navigate = useNavigate();
+  const { data: user } = useCurrentUser();
+  const { mutate: logout } = useLogout();
 
   const handleLogoutClick = () => {
-    onLogout();
-    navigate('/'); // Kijelentkezés után főoldalra dob
+    logout(undefined, { onSuccess: () => navigate('/') });
   };
 
   return (
@@ -16,19 +19,19 @@ function Navbar({ isLoggedIn, onLogout }) {
           EuroTrip ✈️
         </Link>
 
-                <div className="nav-links">
+        <div className="nav-links">
           <Link to="/" className="nav-btn">Kezdőlap</Link>
           <Link to="/citys" className="nav-btn">Városok</Link>
 
-          {isLoggedIn ? (
+          {user ? (
             <>
-              <Link to="/profile" className="nav-btn">Profilom</Link>
-              <button className="nav-btn logout-style" onClick={handleLogoutClick}>
+              <Link to="/profile" className="nav-btn">{user.name}</Link>
+              <button className="nav-btn logout-link" onClick={handleLogoutClick}>
                 Kijelentkezés
               </button>
             </>
           ) : (
-            <Link to="/login" className="nav-btn login-style">Bejelentkezés</Link>
+            <Link to="/login" className="nav-btn login-link">Bejelentkezés</Link>
           )}
         </div>
       </div>

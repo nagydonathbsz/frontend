@@ -1,55 +1,45 @@
 import React, { useState } from 'react';
-import callApi from './call_api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRegister } from './hooks/useRegister';
 
-function Register({ onSwitchToLogin }) {
+function Register() {
+  const navigate = useNavigate();
+  const { mutate: register, isPending } = useRegister();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     password: '',
+    confirmPassword: '',
   });
-  
+
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Validáció
   const isEmailValid = formData.email.includes('@') && formData.email.includes('.');
   const isPasswordValid = formData.password.length >= 6;
   const isNameValid = formData.name.trim().length >= 3;
-  const isFormValid = isEmailValid && isPasswordValid && isNameValid && !loading;
+  const isConfirmValid = formData.confirmPassword === formData.password;
+  const isFormValid = isEmailValid && isPasswordValid && isNameValid && isConfirmValid && !isPending;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (error) setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
-    setLoading(true);
-    setError('');
-
-    try {
-      await callApi.register(formData);
-      setSuccess(true);
-      
-      // 2 másodperc múlva átirányítjuk a loginra
-      setTimeout(() => {
-        onSwitchToLogin();
-      }, 2000);
-      
-    } catch (err) {
-      setError(err.message || 'Hiba történt a regisztráció során.');
-    } finally {
-      setLoading(false);
-    }
+    register(formData, {
+      onSuccess: () => {
+        setSuccess(true);
+        setTimeout(() => navigate('/login'), 2000);
+      },
+      onError: (err) => setError(err.message || 'Hiba történt a regisztráció során.'),
+    });
   };
 
   return (
@@ -59,8 +49,8 @@ function Register({ onSwitchToLogin }) {
         <p className="login-subtitle">Hozzon létre fiókot az utazás megkezdéséhez.</p>
 
         {success ? (
-          <div style={{ textAlign: 'center', color: 'green', padding: '20px' }}>
-            <h3>Sikeres regisztráció! ✅</h3>
+          <div style={{ textAlign: 'center', color: 'var(--success)', padding: '20px' }}>
+            <h3>Sikeres regisztráció!</h3>
             <p>Átirányítás a bejelentkezéshez...</p>
           </div>
         ) : (
@@ -116,15 +106,31 @@ function Register({ onSwitchToLogin }) {
               />
             </div>
 
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Jelszó megerősítése</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+              />
+              {formData.confirmPassword && !isConfirmValid && (
+                <p className="field-error">A jelszavak nem egyeznek.</p>
+              )}
+            </div>
+
             {error && <div className="error-msg">{error}</div>}
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="login-btn"
               disabled={!isFormValid}
               style={{ opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? 'pointer' : 'not-allowed' }}
             >
-              {loading ? 'Feldolgozás...' : 'Regisztráció'}
+              {isPending ? 'Feldolgozás...' : 'Regisztráció'}
             </button>
           </form>
         )}
