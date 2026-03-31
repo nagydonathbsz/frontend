@@ -25,7 +25,13 @@ function Navbar() {
 
           {user ? (
             <>
-              <Link to="/profile" className="nav-btn">{user.name}</Link>
+              <button
+                className="profile-avatar-btn"
+                onClick={() => navigate('/profile')}
+                title={user.name}
+              >
+                {user.name?.charAt(0).toUpperCase()}
+              </button>
               <button className="nav-btn logout-link" onClick={handleLogoutClick}>
                 Kijelentkezés
               </button>

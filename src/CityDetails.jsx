@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AccommodationDetails from './AccommodationDetails';
-import RestaurantDetails from './RestaurantDetails'; 
+import RestaurantDetails from './RestaurantDetails';
+
+function StarRating({ rating }) {
+    const val = rating ?? 0;
+    const full = Math.floor(val);
+    const half = val - full >= 0.5;
+    return (
+        <span className="star-rating">
+            {[1,2,3,4,5].map(i => (
+                <span key={i} className={i <= full ? 'star filled' : (i === full + 1 && half ? 'star half' : 'star empty')}>★</span>
+            ))}
+            <span className="rating-value">{val.toFixed(1)}</span>
+        </span>
+    );
+}
 
 function CityDetails() {
     const { cityId } = useParams();
     const navigate = useNavigate();
-    
+
     const [city, setCity] = useState(null);
     const [accommodations, setAccommodations] = useState([]);
     const [restaurants, setRestaurants] = useState([]);
     const [activeTab, setActiveTab] = useState('hotels');
     const [loading, setLoading] = useState(true);
+    const [minRating, setMinRating] = useState(0);
 
     const [selectedAcco, setSelectedAcco] = useState(null);
     const [selectedRest, setSelectedRest] = useState(null);
@@ -20,21 +35,15 @@ function CityDetails() {
         const fetchEverything = async () => {
             setLoading(true);
             try {
-                // 1. Város adatainak lekérése (hogy tudjuk a nevét a képhez és a címhez)
                 const cityRes = await fetch(`https://localhost:7046/api/City/${cityId}`);
-                if (cityRes.ok) {
-                    const cityData = await cityRes.json();
-                    setCity(cityData);
-                }
+                if (cityRes.ok) setCity(await cityRes.json());
 
-                // 2. Szállások lekérése
-                const accRes = await fetch(`https://localhost:7046/api/Accommodation/city/${cityId}`); 
+                const accRes = await fetch(`https://localhost:7046/api/Accommodation/city/${cityId}`);
                 if (accRes.ok) {
                     const accData = await accRes.json();
                     setAccommodations(Array.isArray(accData) ? accData : []);
                 }
 
-                // 3. Éttermek lekérése
                 const restRes = await fetch(`https://localhost:7046/api/Restaurant/city/${cityId}`);
                 if (restRes.ok) {
                     const restData = await restRes.json();
@@ -53,67 +62,76 @@ function CityDetails() {
     if (loading) return <div className="container">Betöltés...</div>;
     if (!city) return <div className="container">A város nem található.</div>;
 
-    if (selectedAcco) {
-        return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} />;
-    }
+    if (selectedAcco) return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} />;
+    if (selectedRest) return <RestaurantDetails restaurant={selectedRest} onBack={() => setSelectedRest(null)} />;
 
-    if (selectedRest) {
-        return <RestaurantDetails restaurant={selectedRest} onBack={() => setSelectedRest(null)} />;
-    }
+    const filteredAcco = accommodations.filter(a => (a.rating ?? 0) >= minRating);
+    const filteredRest = restaurants.filter(r => (r.rating ?? 0) >= minRating);
 
     return (
-        <div className="container">
-            {/* A navigate(-1) visszadob az előző oldalra (Dashboard) */}
-            <button className="back-btn" onClick={() => navigate(-1)}>← Vissza a listához</button>
-            
-            <div className="detail-hero">
-                <img 
-                    src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/${city.name.toLowerCase().replace(/\s+/g, '-')}.jpg`} 
-                    alt={city.name} 
-                    onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip'}
-                />
-                <div className="hero-text">
-                    <h1>{city.name}</h1>
+        <div className="city-details-page">
+            <div className="city-hero" style={{backgroundImage: `linear-gradient(rgba(15,23,42,0.5), rgba(15,23,42,0.5)), url('https://res.cloudinary.com/duqxzcf4e/image/upload/w_1600,h_500,c_fill,g_auto,f_auto,q_auto/${city.name.toLowerCase().replace(/\s+/g, '-')}.jpg')`}}>
+                <button className="back-btn city-hero-back" onClick={() => navigate(-1)}>← Vissza</button>
+                <h1 className="city-hero-title">{city.name}</h1>
+            </div>
+
+            <div className="city-details-controls">
+                <div className="tab-menu">
+                    <button
+                        className={activeTab === 'hotels' ? 'active' : ''}
+                        onClick={() => setActiveTab('hotels')}
+                    >
+                        Szálláshelyek ({filteredAcco.length})
+                    </button>
+                    <button
+                        className={activeTab === 'restaurants' ? 'active' : ''}
+                        onClick={() => setActiveTab('restaurants')}
+                    >
+                        Éttermek ({filteredRest.length})
+                    </button>
+                </div>
+
+                <div className="rating-filter">
+                    <span className="rating-filter-label">Min. értékelés:</span>
+                    {[0,1,2,3,4,5].map(val => (
+                        <button
+                            key={val}
+                            className={`rating-filter-btn ${minRating === val ? 'active' : ''}`}
+                            onClick={() => setMinRating(val)}
+                        >
+                            {val === 0 ? 'Mind' : `${val}★`}
+                        </button>
+                    ))}
                 </div>
             </div>
 
-            <div className="tab-menu">
-                <button 
-                    className={activeTab === 'hotels' ? 'active' : ''} 
-                    onClick={() => setActiveTab('hotels')}
-                >
-                    Szálláshelyek ({accommodations.length})
-                </button>
-                <button 
-                    className={activeTab === 'restaurants' ? 'active' : ''} 
-                    onClick={() => setActiveTab('restaurants')}
-                >
-                    Éttermek ({restaurants.length})
-                </button>
-            </div>
+            <div className="container city-details-body">
 
             <div className="grid">
                 {activeTab === 'hotels' ? (
-                    accommodations.length > 0 ? (
-                        accommodations.map(acc => (
-                            <div key={acc.id} className="sub-card"> 
-                            <h3>{acc.name}</h3>
+                    filteredAcco.length > 0 ? (
+                        filteredAcco.map(acc => (
+                            <div key={acc.id} className="sub-card">
+                                <h3>{acc.name}</h3>
                                 <p>📍 {acc.address}</p>
+                                <StarRating rating={acc.rating} />
                                 <button className="book-btn" onClick={() => setSelectedAcco(acc)}>Megtekintés</button>
                             </div>
                         ))
-                    ) : <p>Nincs elérhető szálláshely.</p>
+                    ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
                 ) : (
-                    restaurants.length > 0 ? (
-                        restaurants.map(rest => (
+                    filteredRest.length > 0 ? (
+                        filteredRest.map(rest => (
                             <div key={rest.id} className="sub-card">
                                 <h3>{rest.name}</h3>
                                 <p>📍 {rest.address}</p>
+                                <StarRating rating={rest.rating} />
                                 <button className="book-btn" onClick={() => setSelectedRest(rest)}>Megtekintés</button>
                             </div>
                         ))
-                    ) : <p>Nincs elérhető étterem.</p>
+                    ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
                 )}
+            </div>
             </div>
         </div>
     );

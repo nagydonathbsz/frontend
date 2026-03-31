@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Home from './Home';
 import Login from './Login';
@@ -14,6 +14,8 @@ import './App.css';
 
 function App() {
   const { data: user, isLoading } = useCurrentUser();
+  const location = useLocation();
+  const hideFooter = ['/login', '/register', '/profile'].includes(location.pathname);
 
   return (
     <div className="app-container">
@@ -47,7 +49,7 @@ function App() {
         </Routes>
       </main>
 
-      <Footer />
+      {!hideFooter && <Footer />}
     </div>
   );
 }

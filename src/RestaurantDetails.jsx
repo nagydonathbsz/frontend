@@ -16,12 +16,14 @@ function RestaurantDetails({ restaurant, onBack }) {
   const handleReserve = (e) => {
     e.preventDefault();
     setErrorMsg('');
+    const start = new Date(`${form.resDate}T${form.resTime}`);
+    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
     reserveTable(
       {
         userId: user.id,
         tableId: reservingTableId,
-        resDate: form.resDate,
-        resTime: form.resDate + 'T' + form.resTime,
+        reservationStart: start.toISOString(),
+        reservationEnd: end.toISOString(),
       },
       {
         onSuccess: () => {
@@ -66,7 +68,7 @@ function RestaurantDetails({ restaurant, onBack }) {
         <div className="grid">
           {tables.map((table) => (
             <div key={table.id} className="sub-card">
-              <h3>🍽️ {table.id}. asztal</h3>
+              <h3>🍽️ Asztal</h3>
               <p>Férőhely: {table.seats} fő</p>
 
               {reservingTableId === table.id ? (

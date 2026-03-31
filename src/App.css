@@ -42,6 +42,18 @@ body {
     width: 100%;
 }
 
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -55,9 +67,8 @@ body {
    ========================================= */
 .navbar {
     display: flex;
-    justify-content: space-between; /* A logó balra, a linkek jobbra kerülnek */
     align-items: center;
-    padding: 1rem 5%;
+    padding: 1rem 0;
     background: var(--card-bg);
     box-shadow: var(--shadow-sm);
     position: sticky;
@@ -67,11 +78,10 @@ body {
 
 .navbar .nav-container {
     display: flex;
-    justify-content: space-between; /* Ez tolja szét a logót és a linkeket */
+    justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
     width: 100%;
+    padding: 0 16px 0 56px;
 }
 
 .logo {
@@ -151,30 +161,32 @@ body {
    3. HOME (Kezdőlap)
    ========================================= */
 .home-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 100px 20px;
-    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), 
-                
+    padding: 40px 20px;
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)),
                 url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
     color: var(--white);
-    border-radius: 0 0 40px 40px;
-    margin-bottom: 50px;
     box-shadow: var(--shadow-md);
 }
 
 .home-hero h1 {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 16px;
     font-weight: 800;
     letter-spacing: -1px;
 }
 
 .home-hero p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     max-width: 600px;
-    margin: 0 auto 30px;
+    margin: 0 auto 24px;
     opacity: 0.9;
 }
 
@@ -238,6 +250,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     padding-bottom: 40px;
+    align-items: start;
 }
 
 .city-card {
@@ -301,34 +314,56 @@ body {
 /* =========================================
    5. CITY DETAILS (Részletes nézet)
    ========================================= */
-.detail-hero {
+.city-details-page {
+    flex: 1;
+}
+
+.city-hero {
+    width: 100%;
+    height: 280px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
     position: relative;
-    height: 400px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 40px;
-    box-shadow: var(--shadow-md);
+    margin-bottom: 16px;
 }
 
-.detail-hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.hero-text {
+.city-hero-back {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    padding: 40px;
+    top: 20px;
+    left: 24px;
     color: white;
+    border: 2px solid rgba(255,255,255,0.85);
+    background: rgba(0,0,0,0.45);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 8px 18px;
+    backdrop-filter: blur(4px);
 }
 
-.hero-text h1 {
-    font-size: 3rem;
+.city-hero-back:hover {
+    background: rgba(0,0,0,0.7);
+    border-color: white;
+    color: white;
+    transform: translateX(-2px);
+}
+
+.city-hero-title {
+    color: white;
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
     margin: 0;
+}
+
+.city-details-body {
+    padding-top: 12px;
+    padding-bottom: 40px;
 }
 
 .tab-menu {
@@ -396,6 +431,93 @@ body {
 
 .book-btn:hover {
     background: var(--primary-hover);
+}
+
+.city-details-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    margin-top: 28px;
+    width: 100%;
+}
+
+.city-details-controls .tab-menu {
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 35px;
+    justify-content: center;
+}
+
+.rating-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.rating-filter-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+.rating-filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: var(--white);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rating-filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.rating-filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+.star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 6px 0 12px;
+}
+
+.star {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.star.filled {
+    color: #f59e0b;
+}
+
+.star.half {
+    color: #f59e0b;
+    opacity: 0.6;
+}
+
+.star.empty {
+    color: #e2e8f0;
+}
+
+.rating-value {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-left: 4px;
 }
 
 .back-btn {
@@ -526,6 +648,8 @@ body {
    ========================================= */
 .profile-card {
     max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .profile-header {
@@ -626,14 +750,14 @@ body {
 .site-footer {
     background: var(--text-main);
     color: #cbd5e1;
-    padding: 60px 0 30px;
+    padding: 14px 0 8px;
     margin-top: auto;
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
@@ -641,14 +765,19 @@ body {
 
 .footer-section h3 {
     color: var(--white);
-    margin-bottom: 20px;
-    font-size: 1.2rem;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+.footer-section p {
+    font-size: 0.8rem;
+    line-height: 1.6;
 }
 
 .social-links {
     display: flex;
-    gap: 20px;
-    font-size: 1.5rem;
+    gap: 12px;
+    font-size: 1rem;
 }
 
 .social-links a {
@@ -662,10 +791,10 @@ body {
 
 .footer-bottom {
     text-align: center;
-    margin-top: 60px;
-    padding-top: 20px;
+    margin-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 /* =========================================
@@ -703,7 +832,217 @@ body {
 }
 
 /* =========================================
-   10. ANIMÁCIÓK ÉS RESZPONZÍV
+   10. PROFIL OLDAL
+   ========================================= */
+.profile-avatar-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-avatar-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.profile-page {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.profile-page .tab-menu {
+    margin-bottom: 32px;
+}
+
+.profile-card {
+    padding: 36px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.profile-header .login-title {
+    margin-bottom: 0;
+}
+
+.profile-admin-badge {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-field-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.profile-field-value {
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.profile-empty {
+    color: var(--text-muted);
+    font-style: normal;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.profile-cancel-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    border: 1px solid #e2e8f0;
+    background: var(--white);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.profile-cancel-btn:hover {
+    background: #f1f5f9;
+    color: var(--text-main);
+}
+
+.profile-success-msg {
+    background: #f0fdf4;
+    color: var(--success);
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.booking-card {
+    background: var(--card-bg);
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.booking-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.booking-delete-btn {
+    background: none;
+    border: 1px solid #fca5a5;
+    color: #ef4444;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.booking-delete-btn:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.booking-card-info h4 {
+    color: var(--text-main);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.booking-card-info p {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.booking-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.booking-status.free {
+    background: #f0fdf4;
+    color: var(--success);
+}
+
+.booking-status.booked {
+    background: #eff6ff;
+    color: var(--primary);
+}
+
+.booking-status.default {
+    background: #f1f5f9;
+    color: var(--text-muted);
+}
+
+.empty-bookings {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+}
+
+/* =========================================
+   11. ANIMÁCIÓK ÉS RESZPONZÍV
    ========================================= */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
@@ -715,9 +1054,9 @@ body {
 }
 
 @media (max-width: 768px) {
-    .home-hero h1 { font-size: 2.5rem; }
+    .home-hero h1 { font-size: 2rem; }
     .search-bar input { padding: 12px 20px; }
     .navbar { flex-direction: column; gap: 15px; }
-    .detail-hero { height: 250px; }
-    .hero-text h1 { font-size: 2rem; }
+    .city-hero-title { font-size: 1.6rem; }
+    .city-details-header { padding: 20px 16px 12px; }
 }
