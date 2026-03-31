@@ -19,6 +19,9 @@ export async function postTableReservationRequest(data) {
     },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('A foglalás sikertelen.');
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || 'A foglalás sikertelen.');
+  }
   return await response.json();
 }
