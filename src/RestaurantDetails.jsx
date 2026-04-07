@@ -13,6 +13,10 @@ function RestaurantDetails({ restaurant, onBack }) {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const today = new Date().toISOString().split('T')[0];
+  const maxDate = (() => { const d = new Date(); d.setMonth(d.getMonth() + 6); return d.toISOString().split('T')[0]; })();
+  const maxDateDisplay = (() => { const d = new Date(); d.setMonth(d.getMonth() + 6); return d.toLocaleDateString('hu-HU'); })();
+
   const handleReserve = (e) => {
     e.preventDefault();
     setErrorMsg('');
@@ -78,9 +82,12 @@ function RestaurantDetails({ restaurant, onBack }) {
                     <input
                       type="date"
                       value={form.resDate}
+                      min={today}
+                      max={maxDate}
                       onChange={(e) => setForm((f) => ({ ...f, resDate: e.target.value }))}
                       required
                     />
+                    <small className="date-hint">Legkésőbbi időpont: {maxDateDisplay}</small>
                   </div>
                   <div className="form-group">
                     <label>Időpont</label>
@@ -106,7 +113,7 @@ function RestaurantDetails({ restaurant, onBack }) {
                   </div>
                 </form>
               ) : user ? (
-                <button className="book-btn" onClick={() => { setReservingTableId(table.id); setSuccessMsg(''); }}>
+                <button className="book-btn" onClick={() => { setReservingTableId(table.id); setForm({ resDate: '', resTime: '' }); setErrorMsg(''); setSuccessMsg(''); }}>
                   Foglalás
                 </button>
               ) : (

@@ -13,6 +13,10 @@ function AccommodationDetails({ hotel, onBack }) {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const today = new Date().toISOString().split('T')[0];
+  const maxDate = (() => { const d = new Date(); d.setMonth(d.getMonth() + 6); return d.toISOString().split('T')[0]; })();
+  const maxDateDisplay = (() => { const d = new Date(); d.setMonth(d.getMonth() + 6); return d.toLocaleDateString('hu-HU'); })();
+
   const handleBook = (e) => {
     e.preventDefault();
     setErrorMsg('');
@@ -77,7 +81,9 @@ function AccommodationDetails({ hotel, onBack }) {
                     <input
                       type="date"
                       value={form.checkIn}
-                      onChange={(e) => setForm((f) => ({ ...f, checkIn: e.target.value }))}
+                      min={today}
+                      max={maxDate}
+                      onChange={(e) => setForm((f) => ({ ...f, checkIn: e.target.value, checkOut: '' }))}
                       required
                     />
                   </div>
@@ -86,9 +92,12 @@ function AccommodationDetails({ hotel, onBack }) {
                     <input
                       type="date"
                       value={form.checkOut}
+                      min={form.checkIn || today}
+                      max={maxDate}
                       onChange={(e) => setForm((f) => ({ ...f, checkOut: e.target.value }))}
                       required
                     />
+                    <small className="date-hint">Legkésőbbi időpont: {maxDateDisplay}</small>
                   </div>
                   {errorMsg && <div className="error-msg">{errorMsg}</div>}
                   <div className="profile-actions">
@@ -105,7 +114,7 @@ function AccommodationDetails({ hotel, onBack }) {
                   </div>
                 </form>
               ) : user ? (
-                <button className="book-btn" onClick={() => { setBookingRoomId(room.id); setSuccessMsg(''); }}>
+                <button className="book-btn" onClick={() => { setBookingRoomId(room.id); setForm({ checkIn: '', checkOut: '' }); setErrorMsg(''); setSuccessMsg(''); }}>
                   Foglalás
                 </button>
               ) : (

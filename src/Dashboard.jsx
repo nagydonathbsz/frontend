@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function Dashboard({ onCitySelect }) {
     const [cities, setCities] = useState([]);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
     const [searchCity, setSearchCity] = useState('');
     const navigate = useNavigate();
 
@@ -24,6 +25,8 @@ function Dashboard({ onCitySelect }) {
                 setCities(data);
             } catch (err) {
                 setError(err.message);
+            } finally {
+                setLoading(false);
             }
         };
         fetchCities();
@@ -58,7 +61,13 @@ function Dashboard({ onCitySelect }) {
             <div className="grid">
                 {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
 
-                {filteredCities.map((city) => (
+                {loading && (
+                    <div className="loading-spinner-wrapper">
+                        <div className="loading-spinner"></div>
+                    </div>
+                )}
+
+                {!loading && filteredCities.map((city) => (
                     <div 
                         key={city.id || city.city_id} 
                         className="city-card" 
