@@ -20,14 +20,14 @@ function RestaurantDetails({ restaurant, onBack }) {
   const handleReserve = (e) => {
     e.preventDefault();
     setErrorMsg('');
-    const start = new Date(`${form.resDate}T${form.resTime}`);
-    const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+    const [h, m] = form.resTime.split(':').map(Number);
+    const endH = String(h + 2).padStart(2, '0');
     reserveTable(
       {
         userId: user.id,
         tableId: reservingTableId,
-        reservationStart: start.toISOString(),
-        reservationEnd: end.toISOString(),
+        reservationStart: `${form.resDate}T${form.resTime}:00`,
+        reservationEnd: `${form.resDate}T${endH}:${String(m).padStart(2, '0')}:00`,
       },
       {
         onSuccess: () => {

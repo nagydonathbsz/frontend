@@ -70,7 +70,7 @@ function AccommodationDetails({ hotel, onBack }) {
         <div className="grid">
           {rooms.map((room) => (
             <div key={room.id} className="sub-card">
-              <h3>🛏️ {room.roomNumber ?? `${room.id}. szoba`}</h3>
+              <h3>🛏️ Szoba</h3>
               <p>Férőhely: {room.capacity} fő</p>
               <p>Ár: {room.price} €/éj</p>
 
