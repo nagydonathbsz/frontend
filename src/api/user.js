@@ -10,6 +10,16 @@ export async function getMeRequest() {
   return await response.json();
 }
 
+export async function deleteAccountRequest() {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Nincs érvényes munkamenet!');
+  const response = await fetch(`${BASE_URL}/user/me`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error('A fiók törlése sikertelen!');
+}
+
 export async function updateMeRequest(userData) {
   const token = localStorage.getItem('token');
   if (!token) throw new Error('Nincs érvényes munkamenet!');

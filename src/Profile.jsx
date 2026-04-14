@@ -5,6 +5,7 @@ import { useMyBookings } from './hooks/useMyBookings';
 import { useMyReservations } from './hooks/useMyReservations';
 import { useDeleteBooking } from './hooks/useDeleteBooking';
 import { useDeleteReservation } from './hooks/useDeleteReservation';
+import { deleteAccountRequest } from './api/user';
 
 function StatusBadge({ status }) {
   const s = status?.toLowerCase();
@@ -127,6 +128,16 @@ function Profile() {
                 </div>
               </div>
               <button className="login-btn" onClick={startEdit}>Adatok szerkesztése</button>
+              <button
+                className="booking-delete-btn"
+                style={{ marginTop: '12px', width: '100%' }}
+                onClick={async () => {
+                  if (!window.confirm('Biztosan törlöd a fiókodat? Ez az összes foglalásodat is törli, és nem vonható vissza!')) return;
+                  await deleteAccountRequest();
+                  localStorage.removeItem('token');
+                  window.location.href = '/';
+                }}
+              >Fiók törlése</button>
             </>
           )}
         </div>

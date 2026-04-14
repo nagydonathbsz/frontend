@@ -59,7 +59,11 @@ function CityDetails() {
         fetchEverything();
     }, [cityId]);
 
-    if (loading) return <div className="container">Betöltés...</div>;
+    if (loading) return (
+        <div className="loading-spinner-wrapper" style={{ minHeight: '60vh' }}>
+            <div className="loading-spinner"></div>
+        </div>
+    );
     if (!city) return <div className="container">A város nem található.</div>;
 
     if (selectedAcco) return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} />;

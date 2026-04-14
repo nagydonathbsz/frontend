@@ -67,7 +67,7 @@ function RestaurantDetails({ restaurant, onBack }) {
       {!user ? (
         <p className="login-required-msg">Az asztalok megtekintéséhez és foglaláshoz <a href="/login">be kell jelentkezni</a>.</p>
       ) : isLoading ? (
-        <p>Betöltés...</p>
+        <div className="loading-spinner-wrapper"><div className="loading-spinner"></div></div>
       ) : tables?.length > 0 ? (
         <div className="grid">
           {tables.map((table) => (
