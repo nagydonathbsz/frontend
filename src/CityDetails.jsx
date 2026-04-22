@@ -3,6 +3,30 @@ import { useParams, useNavigate } from 'react-router-dom';
 import AccommodationDetails from './AccommodationDetails';
 import RestaurantDetails from './RestaurantDetails';
 
+const MAX_HOTEL_IMAGES = 68;
+const MAX_REST_IMAGES = 74;
+
+// Dinamikus betöltő komponens a kártyákhoz
+function DynamicImage({ src, alt }) {
+    const [isLoading, setIsLoading] = useState(true);
+
+    return (
+        <div className="image-wrapper">
+            {isLoading && <div className="loading-spinner"></div>}
+            <img
+                src={src}
+                alt={alt}
+                className={`dynamic-card-img ${isLoading ? 'img-loading' : 'img-loaded'}`}
+                onLoad={() => setIsLoading(false)}
+                onError={(e) => {
+                    setIsLoading(false);
+                    e.target.src = 'https://via.placeholder.com/400x250?text=Kép+nem+elérhető';
+                }}
+            />
+        </div>
+    );
+}
+
 function StarRating({ rating }) {
     const val = rating ?? 0;
     const full = Math.floor(val);
@@ -20,6 +44,7 @@ function StarRating({ rating }) {
 function CityDetails() {
     const { cityId } = useParams();
     const navigate = useNavigate();
+    const cityOffset = parseInt(cityId) || 0;
 
     const [city, setCity] = useState(null);
     const [accommodations, setAccommodations] = useState([]);
@@ -66,8 +91,9 @@ function CityDetails() {
     );
     if (!city) return <div className="container">A város nem található.</div>;
 
-    if (selectedAcco) return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} />;
-    if (selectedRest) return <RestaurantDetails restaurant={selectedRest} onBack={() => setSelectedRest(null)} />;
+    // Részletes nézetek meghívása, átadjuk az offsetet és a limiteket
+    if (selectedAcco) return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} cityOffset={cityOffset} maxImages={MAX_HOTEL_IMAGES} />;
+    if (selectedRest) return <RestaurantDetails restaurant={selectedRest} onBack={() => setSelectedRest(null)} cityOffset={cityOffset} maxImages={MAX_REST_IMAGES} />;
 
     const filteredAcco = accommodations.filter(a => (a.rating ?? 0) >= minRating);
     const filteredRest = restaurants.filter(r => (r.rating ?? 0) >= minRating);
@@ -110,32 +136,39 @@ function CityDetails() {
             </div>
 
             <div className="container city-details-body">
-
-            <div className="grid">
-                {activeTab === 'hotels' ? (
-                    filteredAcco.length > 0 ? (
-                        filteredAcco.map(acc => (
-                            <div key={acc.id} className="sub-card">
-                                <h3>{acc.name}</h3>
-                                <p>📍 {acc.address}</p>
-                                <StarRating rating={acc.rating} />
-                                <button className="book-btn" onClick={() => setSelectedAcco(acc)}>Megtekintés</button>
-                            </div>
-                        ))
-                    ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
-                ) : (
-                    filteredRest.length > 0 ? (
-                        filteredRest.map(rest => (
-                            <div key={rest.id} className="sub-card">
-                                <h3>{rest.name}</h3>
-                                <p>📍 {rest.address}</p>
-                                <StarRating rating={rest.rating} />
-                                <button className="book-btn" onClick={() => setSelectedRest(rest)}>Megtekintés</button>
-                            </div>
-                        ))
-                    ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
-                )}
-            </div>
+                <div className="grid">
+                    {activeTab === 'hotels' ? (
+                        filteredAcco.length > 0 ? (
+                            filteredAcco.map(acc => (
+                                <div key={acc.id} className="sub-card">
+                                    <DynamicImage 
+                                        src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_400,h_250,c_fill,g_auto,f_auto,q_auto/hotel-${((acc.id + cityOffset) % MAX_HOTEL_IMAGES) + 1}.jpg`} 
+                                        alt={acc.name}
+                                    />
+                                    <h3>{acc.name}</h3>
+                                    <p>📍 {acc.address}</p>
+                                    <StarRating rating={acc.rating} />
+                                    <button className="book-btn" onClick={() => setSelectedAcco(acc)}>Megtekintés</button>
+                                </div>
+                            ))
+                        ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
+                    ) : (
+                        filteredRest.length > 0 ? (
+                            filteredRest.map(rest => (
+                                <div key={rest.id} className="sub-card">
+                                    <DynamicImage 
+                                        src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_400,h_250,c_fill,g_auto,f_auto,q_auto/rest-${((rest.id + cityOffset) % MAX_REST_IMAGES) + 1}.jpg`} 
+                                        alt={rest.name}
+                                    />
+                                    <h3>{rest.name}</h3>
+                                    <p>📍 {rest.address}</p>
+                                    <StarRating rating={rest.rating} />
+                                    <button className="book-btn" onClick={() => setSelectedRest(rest)}>Megtekintés</button>
+                                </div>
+                            ))
+                        ) : <p>Nincs találat a megadott értékelési szűrőre.</p>
+                    )}
+                </div>
             </div>
         </div>
     );

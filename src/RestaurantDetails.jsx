@@ -3,7 +3,10 @@ import { useCurrentUser } from './hooks/useCurrentUser';
 import { useTablesByRestaurant } from './hooks/useTablesByRestaurant';
 import { useReserveTable } from './hooks/useReserveTable';
 
-function RestaurantDetails({ restaurant, onBack }) {
+// Asztal képek maximuma
+const MAX_TABLE_IMAGES = 10;
+
+function RestaurantDetails({ restaurant, onBack, cityOffset = 0, maxImages = 74 }) {
   const { data: user } = useCurrentUser();
   const { data: tables, isLoading } = useTablesByRestaurant(user ? restaurant.id : null);
   const { mutate: reserveTable, isPending } = useReserveTable();
@@ -46,9 +49,9 @@ function RestaurantDetails({ restaurant, onBack }) {
 
       <div className="detail-hero">
         <img
-          src={restaurant.image || `https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/${restaurant.name?.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+          src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/rest-${((restaurant.id + cityOffset) % maxImages) + 1}.jpg`}
           alt={restaurant.name}
-          onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip'}
+          onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip+Étterem'}
         />
         <div className="hero-text">
           <h1>{restaurant.name}</h1>
@@ -72,6 +75,14 @@ function RestaurantDetails({ restaurant, onBack }) {
         <div className="grid">
           {tables.map((table) => (
             <div key={table.id} className="sub-card">
+              <div className="image-wrapper">
+                <img 
+                    src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_300,h_200,c_fill,g_auto,f_auto,q_auto/table-${((table.id + cityOffset) % MAX_TABLE_IMAGES) + 1}.jpg`} 
+                    alt="Asztal"
+                    className="dynamic-card-img img-loaded"
+                    onError={(e) => e.target.src = 'https://via.placeholder.com/300x200?text=Asztal'}
+                />
+              </div>
               <h3>🍽️ Asztal</h3>
               <p>Férőhely: {table.seats} fő</p>
 

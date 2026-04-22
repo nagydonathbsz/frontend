@@ -3,7 +3,10 @@ import { useCurrentUser } from './hooks/useCurrentUser';
 import { useRoomsByAcco } from './hooks/useRoomsByAcco';
 import { useBookRoom } from './hooks/useBookRoom';
 
-function AccommodationDetails({ hotel, onBack }) {
+// Szoba képek maximuma
+const MAX_ROOM_IMAGES = 10; 
+
+function AccommodationDetails({ hotel, onBack, cityOffset = 0, maxImages = 68 }) {
   const { data: user } = useCurrentUser();
   const { data: rooms, isLoading } = useRoomsByAcco(user ? hotel.id : null);
   const { mutate: bookRoom, isPending } = useBookRoom();
@@ -44,9 +47,9 @@ function AccommodationDetails({ hotel, onBack }) {
 
       <div className="detail-hero">
         <img
-          src={hotel.image || `https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/${hotel.name?.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+          src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_1200,h_400,c_fill,g_auto,f_auto,q_auto/hotel-${((hotel.id + cityOffset) % maxImages) + 1}.jpg`}
           alt={hotel.name}
-          onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip'}
+          onError={(e) => e.target.src = 'https://via.placeholder.com/1200x400?text=EuroTrip+Szállás'}
         />
         <div className="hero-text">
           <h1>{hotel.name}</h1>
@@ -70,6 +73,14 @@ function AccommodationDetails({ hotel, onBack }) {
         <div className="grid">
           {rooms.map((room) => (
             <div key={room.id} className="sub-card">
+              <div className="image-wrapper">
+                <img 
+                    src={`https://res.cloudinary.com/duqxzcf4e/image/upload/w_300,h_200,c_fill,g_auto,f_auto,q_auto/room-${((room.id + cityOffset) % MAX_ROOM_IMAGES) + 1}.jpg`} 
+                    alt="Szoba"
+                    className="dynamic-card-img img-loaded"
+                    onError={(e) => e.target.src = 'https://via.placeholder.com/300x200?text=Szoba'}
+                />
+              </div>
               <h3>🛏️ Szoba</h3>
               <p>Férőhely: {room.capacity} fő</p>
               <p>Ár: {room.price} €/éj</p>
