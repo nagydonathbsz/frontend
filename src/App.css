@@ -78,10 +78,15 @@ body {
 
 .navbar .nav-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 0 16px 0 56px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .logo {
@@ -1129,3 +1134,120 @@ body {
     .city-hero-title { font-size: 1.6rem; }
     .city-details-header { padding: 20px 16px 12px; }
 }
+
+/* =========================================
+   12. TÉMA KAPCSOLÓ
+   ========================================= */
+.theme-toggle-btn {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: border-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.theme-toggle-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* =========================================
+   13. SÖTÉT MÓD
+   ========================================= */
+[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
+}
+
+[data-theme="dark"] .search-bar input,
+[data-theme="dark"] .form-group input {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .login-card { background: var(--card-bg); }
+
+[data-theme="dark"] .sub-card {
+    background: var(--card-bg);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .city-card {
+    background: var(--card-bg);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .tab-menu { background: #1e293b; }
+
+[data-theme="dark"] .tab-menu button.active {
+    background: #334155;
+}
+
+[data-theme="dark"] .rating-filter-btn {
+    background: var(--card-bg);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .back-btn { border-color: #334155; }
+
+[data-theme="dark"] .booking-card {
+    background: var(--card-bg);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .booking-form { border-top-color: #334155; }
+[data-theme="dark"] .login-footer { border-top-color: #334155; }
+[data-theme="dark"] .profile-field { border-bottom-color: #334155; }
+
+[data-theme="dark"] .loading-spinner {
+    border-color: #334155;
+    border-top-color: #3b82f6;
+}
+
+[data-theme="dark"] .image-wrapper { background-color: #334155; }
+[data-theme="dark"] .star.empty { color: #475569; }
+
+[data-theme="dark"] .nav-btn:hover { background-color: #1e293b; }
+[data-theme="dark"] .logout-link:hover { background-color: rgba(239,68,68,0.1); }
+[data-theme="dark"] .theme-toggle-btn { border-color: #334155; }
+
+[data-theme="dark"] .profile-cancel-btn {
+    background: var(--card-bg);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .profile-cancel-btn:hover {
+    background: #334155;
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .badge { background: #1e3a5f; }
+
+[data-theme="dark"] .error-msg {
+    background: rgba(239,68,68,0.1);
+    border-color: rgba(239,68,68,0.3);
+}
+
+[data-theme="dark"] .profile-success-msg {
+    background: rgba(34,197,94,0.1);
+    border-color: rgba(34,197,94,0.3);
+}
+
+[data-theme="dark"] .booking-status.free { background: rgba(34,197,94,0.1); }
+[data-theme="dark"] .booking-status.booked { background: rgba(37,99,235,0.1); }
+[data-theme="dark"] .booking-status.default { background: #334155; }
+
+[data-theme="dark"] .site-footer { background: #020617; }

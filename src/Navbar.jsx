@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { useLogout } from './hooks/useLogout';
 
-function Navbar() {
+function Navbar({ theme, onToggleTheme }) {
   const navigate = useNavigate();
   const { data: user } = useCurrentUser();
   const { mutate: logout } = useLogout();
@@ -15,9 +15,14 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        <Link to="/" className="logo">
-          EuroTrip ✈️
-        </Link>
+        <div className="nav-brand">
+          <Link to="/" className="logo">
+            EuroTrip ✈️
+          </Link>
+          <button className="theme-toggle-btn" onClick={onToggleTheme} title={theme === 'dark' ? 'Világos mód' : 'Sötét mód'}>
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+        </div>
 
         <div className="nav-links">
           <Link to="/" className="nav-btn">Kezdőlap</Link>
