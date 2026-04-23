@@ -3,7 +3,6 @@ import { useCurrentUser } from './hooks/useCurrentUser';
 import { useTablesByRestaurant } from './hooks/useTablesByRestaurant';
 import { useReserveTable } from './hooks/useReserveTable';
 
-// Asztal képek maximuma
 const MAX_TABLE_IMAGES = 10;
 
 function RestaurantDetails({ restaurant, onBack, cityOffset = 0, maxImages = 74 }) {
@@ -105,9 +104,12 @@ function RestaurantDetails({ restaurant, onBack, cityOffset = 0, maxImages = 74 
                     <input
                       type="time"
                       value={form.resTime}
+                      min="10:00"
+                      max="20:00"
                       onChange={(e) => setForm((f) => ({ ...f, resTime: e.target.value }))}
                       required
                     />
+                    <small className="date-hint">Foglalás 10:00 és 20:00 között lehetséges</small>
                   </div>
                   {errorMsg && <div className="error-msg">{errorMsg}</div>}
                   <div className="profile-actions">

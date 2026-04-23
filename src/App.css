@@ -1,22 +1,19 @@
-/* =========================================
-   1. VÁLTOZÓK ÉS ALAPBEÁLLÍTÁSOK
-   ========================================= */
 :root {
-    --primary: #2563eb;         /* Élénk modern kék */
-    --primary-hover: #1d4ed8;   /* Sötétebb kék hoverhez */
-    --accent: #14b8a6;          /* Türkiz (kiemelésekhez) */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent: #14b8a6;
     --accent-hover: #0f766e;
-    --bg: #f8fafc;              /* Nagyon világos szürke háttér */
-    --card-bg: #ffffff;         /* Hófehér kártyák */
-    --text-main: #1e293b;       /* Sötétszürke főszöveg */
-    --text-muted: #64748b;      /* Halványabb mellékszöveg */
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
     --white: #ffffff;
-    --error: #ef4444;           /* Piros hibaüzenethez */
-    --success: #22c55e;         /* Zöld sikerüzenethez */
+    --error: #ef4444;
+    --success: #22c55e;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
     --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-    --radius: 16px;             /* Egységes lekerekítés */
+    --radius: 16px;
 }
 
 * {
@@ -421,7 +418,6 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-/* JAVÍTOTT KÁRTYA STÍLUSOK (SUB-CARD) */
 .sub-card {
     background: var(--white);
     padding: 25px;
@@ -431,7 +427,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden; /* Garantálja, hogy semmi sem lóg ki a kerekített sarkokon túl */
+    overflow: hidden;
 }
 
 .sub-card:hover {
@@ -445,26 +441,24 @@ body {
     font-size: 1.2rem;
 }
 
-/* JAVÍTOTT KÉP KONTÉNER A KÁRTYÁKBAN */
 .image-wrapper {
     position: relative;
     /* Negatív margóval kihúzzuk a képet a kártya széléig (a 25px padding ellenére) */
     margin: -25px -25px 16px -25px;
     width: calc(100% + 50px);
-    height: 180px; 
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #f1f5f9;
-    overflow: hidden; /* Levágja a kilógó részeket */
+    overflow: hidden;
 }
 
-/* A kép alapállapota és animációja */
 .dynamic-card-img {
     width: 100%;
     height: 100%;
     display: block;
-    object-fit: cover; /* Torzítás nélkül kitölti a rendelkezésre álló keretet */
+    object-fit: cover;
     object-position: center;
     transition: opacity 0.4s ease-in-out;
 }

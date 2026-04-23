@@ -36,8 +36,6 @@ function Dashboard({ onCitySelect }) {
         c.name.toLowerCase().includes(searchCity.toLowerCase())
     );
 
-    // Ez a függvény felel a váltásért: megmarad az onCitySelect is a biztonság kedvéért,
-    // de az URL-t is frissítjük.
     function handleCityClick(city) {
         if (onCitySelect) onCitySelect(city); 
         navigate(`/citys/${city.id || city.city_id}`);
@@ -72,7 +70,7 @@ function Dashboard({ onCitySelect }) {
                         key={city.id || city.city_id} 
                         className="city-card" 
                         onClick={() => handleCityClick(city)}
-                        style={{ cursor: 'pointer' }} // Hogy látszódjon, hogy kattintható
+                        style={{ cursor: 'pointer' }}
                     >
                         <div className="card-image">
                             <img 

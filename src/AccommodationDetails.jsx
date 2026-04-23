@@ -3,7 +3,6 @@ import { useCurrentUser } from './hooks/useCurrentUser';
 import { useRoomsByAcco } from './hooks/useRoomsByAcco';
 import { useBookRoom } from './hooks/useBookRoom';
 
-// Szoba képek maximuma
 const MAX_ROOM_IMAGES = 10; 
 
 function AccommodationDetails({ hotel, onBack, cityOffset = 0, maxImages = 68 }) {

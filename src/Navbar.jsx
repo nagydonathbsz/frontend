@@ -20,7 +20,7 @@ function Navbar({ theme, onToggleTheme }) {
             EuroTrip ✈️
           </Link>
           <button className="theme-toggle-btn" onClick={onToggleTheme} title={theme === 'dark' ? 'Világos mód' : 'Sötét mód'}>
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? 'LightMode' : 'DarkMode'}
           </button>
         </div>
 

@@ -6,7 +6,6 @@ import RestaurantDetails from './RestaurantDetails';
 const MAX_HOTEL_IMAGES = 68;
 const MAX_REST_IMAGES = 74;
 
-// Dinamikus betöltő komponens a kártyákhoz
 function DynamicImage({ src, alt }) {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -91,7 +90,6 @@ function CityDetails() {
     );
     if (!city) return <div className="container">A város nem található.</div>;
 
-    // Részletes nézetek meghívása, átadjuk az offsetet és a limiteket
     if (selectedAcco) return <AccommodationDetails hotel={selectedAcco} onBack={() => setSelectedAcco(null)} cityOffset={cityOffset} maxImages={MAX_HOTEL_IMAGES} />;
     if (selectedRest) return <RestaurantDetails restaurant={selectedRest} onBack={() => setSelectedRest(null)} cityOffset={cityOffset} maxImages={MAX_REST_IMAGES} />;
 
