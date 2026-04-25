@@ -443,7 +443,6 @@ body {
 
 .image-wrapper {
     position: relative;
-    /* Negatív margóval kihúzzuk a képet a kártya széléig (a 25px padding ellenére) */
     margin: -25px -25px 16px -25px;
     width: calc(100% + 50px);
     height: 180px;
@@ -861,6 +860,37 @@ body {
 /* =========================================
    9. ACCOMMODATION & RESTAURANT DETAILS
    ========================================= */
+.detail-hero {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 24px;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.detail-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: white;
+}
+
+.hero-text h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
 .detail-info {
     display: flex;
     gap: 24px;
@@ -1122,11 +1152,59 @@ body {
 }
 
 @media (max-width: 768px) {
+    .container { padding: 16px; }
+
+    .navbar { padding: 0.6rem 0; }
+    .navbar .nav-container { padding: 0 12px; flex-wrap: wrap; gap: 8px; }
+    .nav-links { gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .nav-btn { padding: 6px 10px; font-size: 0.85rem; }
+    .theme-toggle-btn { font-size: 0.82rem; padding: 4px 8px; }
+
+    .home-hero { padding: 40px 16px; }
     .home-hero h1 { font-size: 2rem; }
-    .search-bar input { padding: 12px 20px; }
-    .navbar { flex-direction: column; gap: 15px; }
+    .home-hero p { font-size: 1rem; }
+    .explore-btn { padding: 12px 28px; font-size: 1rem; }
+
+    .page-header h1 { font-size: 1.8rem; }
+    .search-bar input { padding: 12px 16px; }
+    .grid { grid-template-columns: 1fr; gap: 20px; }
+
+    .city-hero { height: 200px; }
     .city-hero-title { font-size: 1.6rem; }
-    .city-details-header { padding: 20px 16px 12px; }
+
+    .city-details-controls { flex-direction: column; align-items: center; gap: 12px; padding: 0 16px; }
+    .city-details-controls .tab-menu { margin-right: 0; margin-bottom: 0; }
+    .tab-menu button { padding: 8px 16px; font-size: 0.88rem; }
+    .rating-filter { justify-content: center; }
+
+    .detail-hero { height: 200px; border-radius: 12px; }
+    .hero-text { padding: 16px; }
+    .hero-text h1 { font-size: 1.4rem; }
+    .detail-info { flex-direction: column; gap: 8px; }
+    .section-title { font-size: 1.3rem; margin-bottom: 16px; }
+
+    .login-card { padding: 28px 20px; }
+    .login-title { font-size: 1.6rem; }
+
+    .profile-page { margin: 20px auto; }
+    .profile-card { padding: 24px 16px; }
+    .profile-page .tab-menu { flex-wrap: wrap; border-radius: 16px; height: auto; }
+
+    .booking-card { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; }
+    .booking-card-actions { flex-direction: row; align-items: center; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+    .container { padding: 12px; }
+    .logo { font-size: 1.2rem; }
+    .nav-btn { padding: 5px 8px; font-size: 0.8rem; }
+    .home-hero h1 { font-size: 1.6rem; }
+    .page-header h1 { font-size: 1.5rem; }
+    .city-hero-title { font-size: 1.3rem; }
+    .tab-menu button { padding: 6px 12px; font-size: 0.82rem; }
+    .login-card { padding: 24px 14px; }
+    .profile-page .tab-menu { gap: 4px; }
+    .rating-filter-btn { padding: 4px 10px; font-size: 0.78rem; }
 }
 
 /* =========================================
@@ -1245,3 +1323,4 @@ body {
 [data-theme="dark"] .booking-status.default { background: #334155; }
 
 [data-theme="dark"] .site-footer { background: #020617; }
+[data-theme="dark"] .detail-hero img { opacity: 0.85; }
